@@ -60,6 +60,7 @@
         <div class="mode-container">
             <button id="localModeBtn" class="btn btn-small mode-btn active">Locale</button>
             <button id="onlineModeBtn" class="btn btn-small mode-btn">Online</button>
+            <button id="serverConfigBtn" class="btn btn-small" title="Configura server">⚙️</button>
             <span id="modeStatus" class="mode-status">Modalità locale</span>
         </div>
         <!-- Series Info -->
@@ -115,7 +116,26 @@
                 <div id="historyList" class="history-list"></div>
             </div>
         </div>
-    </div>
+
+        <!-- Server Config Modal -->
+        <div id="serverConfigModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>⚙️ Configurazione Server</h2>
+                <div style="margin-top: 15px;">
+                    <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Inserisci l'URL del server (es: https://nome-server.railway.app)</p>
+                    <input type="text" id="serverUrlInput" placeholder="https://..." class="input-field" style="margin-bottom: 15px;">
+                    <button id="saveServerBtn" class="btn btn-primary">Salva & Connetti</button>
+                    <button id="useLocalBtn" class="btn" style="background: #999; color: white; width: 100%; margin-top: 10px;">Usa Localhost (LAN)</button>
+                    <p style="font-size: 0.85rem; color: #999; margin-top: 15px; line-height: 1.4;">
+                        <strong>Per GitHub Pages:</strong> Ospita il server su <strong>Railway.app</strong> (free) e incolla l'URL.<br>
+                        <strong>Per LAN locale:</strong> Clicca "Usa Localhost" per testare su due PC della stessa rete.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </body>
+
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="script.js"></script>

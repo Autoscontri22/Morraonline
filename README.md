@@ -121,26 +121,30 @@ Tutti i dati vengono salvati **localmente nel browser**:
 
 ## 🌐 Modalità Multiplayer (online)
 
-Su questa versione hai la modalità **due giocatori**. Puoi giocare da due dispositivi/browser diversi via WebSocket.
+Su questa versione hai la modalità **due giocatori online**. Puoi giocare da due dispositivi/browser diversi via WebSocket.
 
-1. Apri il progetto nella cartella `provacopilot`.
-2. Installa dipendenze:
-   - `npm init -y`
-   - `npm install express socket.io`
-3. Avvia il server Node:
-   - `node server.js`
-4. Apri due browser diversi su `http://localhost:3000` (o su indirizzo di rete se vuoi usare due computer diversi sulla stessa LAN).
-5. Nel gioco scegli **Online**.
-6. I due giocatori verranno abbinati automaticamente e potranno giocare in tempo reale.
+**⚠️ IMPORTANTE:** GitHub Pages NON può eseguire il server Node.js. Devi deployare il server su una piattaforma esterna (Railway, Render, Heroku) **oppure** testare localmente su LAN.
 
-### Comandi rapidi
-- `npm install` (se hai già package.json)
-- `node server.js`
-- `http://localhost:3000` 
+### 🚀 Quick Start Multiplayer
 
-### Notifiche
-- Se un avversario esce, l'altro riceve un alert di uscita.
-- Se la connessione si interrompe, ricorda di riconnettersi attraverso il bottone ``Online``.
+1. **Per test locale (LAN):**
+   - Avvia il server: `node server.js`
+   - Apri su PC1: `http://localhost:3000`
+   - Apri su PC2: `http://[IP_PC1]:3000`
+   - Nel gioco, clicca ⚙️ e configura il server
+
+2. **Per deploy online (Railway):**
+   - Pushpa su GitHub
+   - Deploy su Railway (free)
+   - Copia l'URL generato
+   - Nel gioco, clicca ⚙️ e incolla l'URL
+
+📖 **Leggi la guida completa:** [MULTIPLAYER_SETUP.md](MULTIPLAYER_SETUP.md)
+
+### Perché non funziona da GitHub Pages?
+GitHub Pages è **solo hosting statico**. Non può eseguire Node.js o WebSocket in background. Per il multiplayer devi:
+- **Opzione A:** Server locale (test su LAN)
+- **Opzione B:** Server deployato su Railway/Render/Heroku (deploy pubblico)
 
 **Nota:** Pulire la cache del browser cancellerà tutti i dati.
 

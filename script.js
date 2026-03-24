@@ -21,6 +21,7 @@ class GameManager {
         this.playerNumber = null;
         this.roomId = null;
         this.waitingWidget = null;
+        this.serverUrl = localStorage.getItem('gameServerUrl') || this.getDefaultServerUrl();
         this.init();
     }
 
@@ -129,6 +130,37 @@ class GameManager {
         });
         window.addEventListener('click', (e) => {
             if (e.target === modal) modal.style.display = 'none';
+        });
+
+        // Server Config Modal
+        const serverConfigModal = document.getElementById('serverConfigModal');
+        const serverCloseBtn = serverConfigModal.querySelector('.close');
+        serverCloseBtn.addEventListener('click', () => {
+            serverConfigModal.style.display = 'none';
+        });
+        window.addEventListener('click', (e) => {
+            if (e.target === serverConfigModal) serverConfigModal.style.display = 'none';
+        });
+
+        document.getElementById('serverConfigBtn').addEventListener('click', () => {
+            document.getElementById('serverUrlInput').value = this.serverUrl || '';
+            serverConfigModal.style.display = 'flex';
+        });
+
+        document.getElementById('saveServerBtn').addEventListener('click', () => {
+            const url = document.getElementById('serverUrlInput').value.trim();
+            if (!url) {
+                alert('Inserisci un URL valido');
+                return;
+            }
+            this.setServerUrl(url);
+            serverConfigModal.style.display = 'none';
+        });
+
+        document.getElementById('useLocalBtn').addEventListener('click', () => {
+            const localUrl = 'http://localhost:3000';
+            this.setServerUrl(localUrl);
+            serverConfigModal.style.display = 'none';
         });
 
         // Enter key for login
@@ -651,21 +683,26 @@ class GameManager {
     startOnlineConnection() {
         if (this.socket && this.socket.connected) return;
 
-        this.socket = io();
+        if (!this.serverUrl) {
+            document.getElementById('modeStatus').textContent = '❌ Server non configurato. Usa il bottone "Configura Server"';
+            return;
+        }
+
+        this.socket = io(this.serverUrl);
 
         this.socket.on('connect', () => {
-            document.getElementById('modeStatus').textContent = 'Connesso. Cercando avversario...';
+            document.getElementById('modeStatus').textContent = '✅ Connesso. Cercando avversario...';
             this.socket.emit('joinGame');
         });
 
         this.socket.on('waitingOpponent', () => {
-            document.getElementById('modeStatus').textContent = 'In attesa di avversario...';
+            document.getElementById('modeStatus').textContent = '⏳ In attesa di avversario...';
         });
 
         this.socket.on('matched', (roomId, playerNumber) => {
             this.roomId = roomId;
             this.playerNumber = playerNumber;
-            document.getElementById('modeStatus').textContent = `Sei connesso alla stanza ${roomId} come Giocatore ${playerNumber}.`;
+            document.getElementById('modeStatus').textContent = `🎮 Sei connesso alla stanza ${roomId} come Giocatore ${playerNumber}.`;
             this.resetSeries();
         });
 
@@ -693,13 +730,17 @@ class GameManager {
         });
 
         this.socket.on('disconnect', () => {
-            document.getElementById('modeStatus').textContent = 'Disconnesso. Controlla la connessione.';
+            document.getElementById('modeStatus').textContent = '❌ Disconnesso. Controlla la connessione.';
             this.roomId = null;
             this.playerNumber = null;
         });
 
+        this.socket.on('connect_error', (error) => {
+            document.getElementById('modeStatus').textContent = `❌ Errore di connessione: ${error.message}`;
+        });
+
         this.socket.on('opponentLeft', () => {
-            document.getElementById('modeStatus').textContent = 'Avversario ha lasciato. Riconnessione in corso...';
+            document.getElementById('modeStatus').textContent = '⚠️ Avversario ha lasciato. Riconnessione in corso...';
         });
     }
 
@@ -743,6 +784,29 @@ class GameManager {
 
     isLandscape() {
         return window.innerHeight < window.innerWidth;
+    }
+
+    getDefaultServerUrl() {
+        // Se su localhost, usa localhost; altrimenti, usa il server esterno
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return `http://localhost:3000`;
+        }
+        // Per GitHub Pages o altri domini, usa un server esterno (configurable)
+        return '';
+    }
+
+    setServerUrl(url) {
+        this.serverUrl = url;
+        localStorage.setItem('gameServerUrl', url);
+        document.getElementById('modeStatus').textContent = `Server configurato: ${url || 'Non impostato'}`;
+        if (this.socket) {
+            this.socket.disconnect();
+            this.socket = null;
+        }
+        // Riprova a connettere
+        setTimeout(() => {
+            this.startOnlineConnection();
+        }, 500);
     }
 }
 

@@ -349,6 +349,7 @@ body {
     padding: 15px;
     background: #f3f3f3;
     border-bottom: 2px solid #e0e0e0;
+    flex-wrap: wrap;
 }
 
 .mode-btn.active {
@@ -359,6 +360,9 @@ body {
 .mode-status {
     font-size: 0.95rem;
     color: #333;
+    flex: 1;
+    min-width: 200px;
+    text-align: center;
 }
 
 
