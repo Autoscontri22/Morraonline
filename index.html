@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="Gioca a Sasso Carta Forbici online. Registrati, sfida il computer e salva i tuoi risultati!">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Sasso Carta Forbici">
+    <title>Sasso Carta Forbici - Gioco Online</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>🎮</text></svg>">
+</head>
+<body>
+    <!-- AUTH SECTION -->
+    <div id="authSection" class="auth-container">
+        <div class="auth-box">
+            <h1>🎮 Sasso Carta Forbici</h1>
+            
+            <!-- Login Form -->
+            <div id="loginForm" class="form-section active">
+                <h2>Accedi</h2>
+                <input type="text" id="loginUsername" placeholder="Nome utente" class="input-field">
+                <input type="password" id="loginPassword" placeholder="Password" class="input-field">
+                <button id="loginBtn" class="btn btn-primary">Accedi</button>
+                <p class="toggle-text">Non hai un account? <a href="#" id="showRegister">Registrati</a></p>
+                <div id="loginError" class="error-message"></div>
+            </div>
+
+            <!-- Registration Form -->
+            <div id="registerForm" class="form-section">
+                <h2>Registrazione</h2>
+                <input type="text" id="regUsername" placeholder="Nome utente" class="input-field">
+                <input type="password" id="regPassword" placeholder="Password" class="input-field">
+                <input type="password" id="regPassword2" placeholder="Conferma Password" class="input-field">
+                <button id="registerBtn" class="btn btn-primary">Registrati</button>
+                <p class="toggle-text">Hai già un account? <a href="#" id="showLogin">Accedi</a></p>
+                <div id="registerError" class="error-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME SECTION -->
+    <div id="gameSection" class="game-container" style="display: none;">
+        <!-- Header with User Info -->
+        <div class="header">
+            <div class="user-info">
+                <span id="username" class="username"></span>
+                <button id="logoutBtn" class="btn btn-small">Esci</button>
+            </div>
+            <div class="stats">
+                <span id="winRate" class="stat"></span>
+                <button id="historyBtn" class="btn btn-small">Cronologia</button>
+            </div>
+        </div>
+        <!-- Multiplayer Mode -->
+        <div class="mode-container">
+            <button id="localModeBtn" class="btn btn-small mode-btn active">Locale</button>
+            <button id="onlineModeBtn" class="btn btn-small mode-btn">Online</button>
+            <span id="modeStatus" class="mode-status">Modalità locale</span>
+        </div>
+        <!-- Series Info -->
+        <div class="series-container">
+            <h2>Serie: Al meglio di 3</h2>
+            <div class="series-display">
+                <div class="series-score">
+                    <div class="score-column">
+                        <p>Tu</p>
+                        <p id="playerSeriesWins" class="series-number">0</p>
+                    </div>
+                    <div class="score-divider">-</div>
+                    <div class="score-column">
+                        <p>Computer</p>
+                        <p id="computerSeriesWins" class="series-number">0</p>
+                    </div>
+                </div>
+                <button id="resetSeriesBtn" class="btn btn-small">Nuova Serie</button>
+            </div>
+            <div id="seriesStatus" class="series-status"></div>
+        </div>
+
+        <!-- Game Play Area -->
+        <div class="game-area">
+            <h3>Seleziona la tua mossa</h3>
+            <div id="choices" class="choices">
+                <button data-choice="rock" class="choice-btn">🪨 Sasso</button>
+                <button data-choice="paper" class="choice-btn">📄 Carta</button>
+                <button data-choice="scissors" class="choice-btn">✂️ Forbici</button>
+            </div>
+
+            <!-- Current Round Result -->
+            <div id="currentRound" class="round-container">
+                <div class="moves-display">
+                    <div class="move-box">
+                        <p class="label">La tua mossa</p>
+                        <p id="playerMove" class="move-emoji">-</p>
+                    </div>
+                    <div class="move-box">
+                        <p class="label">Mossa computer</p>
+                        <p id="computerMove" class="move-emoji">-</p>
+                    </div>
+                </div>
+                <div id="roundResult" class="round-result"></div>
+            </div>
+        </div>
+
+        <!-- History Modal -->
+        <div id="historyModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Cronologia Partite</h2>
+                <div id="historyList" class="history-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
